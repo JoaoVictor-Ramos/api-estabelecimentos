@@ -46,8 +46,7 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
             Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
             entitiesOut.add(data);
         }
-
-        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entitiesOut.size());
+        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
         return pageableOut;
     }
     

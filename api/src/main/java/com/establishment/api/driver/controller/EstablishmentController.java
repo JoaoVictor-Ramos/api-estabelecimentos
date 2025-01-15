@@ -36,7 +36,8 @@ public class EstablishmentController {
     }
 
     @GetMapping("/findAllByName")
-    public ResponseEntity<Object> findAllByName(@RequestParam("name") String name, 
+    public ResponseEntity<Object> findAllByName(
+        @RequestParam("name") String name, 
         @RequestParam(defaultValue = "0") int page, 
         @RequestParam(defaultValue = "100") int size) {
         Page<Establishment> establishments = this.establishmentServicePort.findAllByName(name, page, size);

@@ -10,4 +10,5 @@ import com.establishment.api.domain.model.Establishment;
 public interface EstablishmentServicePort {
     String importer(MultipartFile file) throws IOException;
     Page<Establishment> findAllByName(String name, int page, int size);
+    Page<Establishment> findAllByNameAndStateAndTypeAndShift(String name, String state, String type, String shift, int page, int size);
 }

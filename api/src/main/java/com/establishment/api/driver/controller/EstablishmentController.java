@@ -43,4 +43,17 @@ public class EstablishmentController {
         Page<Establishment> establishments = this.establishmentServicePort.findAllByName(name, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
+
+    @GetMapping("/findAllByNameAndStateAndTypeAndShift")
+    public ResponseEntity<Object> findAllByNameAndStateAndTypeAndShift(
+        @RequestParam("name") String name,
+        @RequestParam("state") String state,
+        @RequestParam("type") String type,
+        @RequestParam("shift") String shift,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "100") int size) {
+        
+        Page<Establishment> establishments = this.establishmentServicePort.findAllByNameAndStateAndTypeAndShift(name, state, type, shift, page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(establishments);
+    }
 }

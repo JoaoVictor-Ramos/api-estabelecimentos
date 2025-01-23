@@ -59,4 +59,8 @@ public class EstablishmentLogic {
             establishments.add(establishment);
             return establishments;
     }
+
+    public Boolean isCnes(Integer cnes) {
+        return cnes != null ? true : false;
+    }
 }

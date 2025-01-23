@@ -46,6 +46,19 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
+    public Establishment findByCnes(Integer cnes) {
+        if (!this.establishmentLogic.isCnes(cnes)) {
+            throw new InvalidEstablishmentAttribute("Invalid CNES: " + cnes);
+        }
+
+        Establishment establishmentOut = this.establishmentPersistencePort.findByCnes(cnes);
+        if (establishmentOut == null) {
+            throw new EstablishmentNotFoundException("Establishment not found with this CNES: " + cnes);
+        }
+        return establishmentOut;
+    }
+
+    @Override
     public Page<Establishment> findAllByName(String name, int page, int size) {
         Page<Establishment> establishments = this.establishmentPersistencePort.findAllByName(name, page, size);
         if (establishments == null) {

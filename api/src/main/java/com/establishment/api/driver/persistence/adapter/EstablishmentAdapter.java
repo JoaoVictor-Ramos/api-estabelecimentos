@@ -2,6 +2,7 @@ package com.establishment.api.driver.persistence.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +32,16 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
         }
         this.establishmentRepository.saveAll(entities);
         return "Establishment saved";
+    }
+
+    @Override
+    public Establishment findByCnes(Integer cnes) {
+        Optional<EstablishmentEntity> entity = this.establishmentRepository.findByCodCnes(cnes);
+        if (entity.isEmpty()) {
+            return null;
+        }
+        
+        return EstablishmentEntityMapper.getInstance().entityToData(entity.get());
     }
 
     @Override

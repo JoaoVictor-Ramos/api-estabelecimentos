@@ -35,6 +35,12 @@ public class EstablishmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully imported establishments");
     }
 
+    @GetMapping("/findByCnes")
+    public ResponseEntity<Object> findByCnes(@RequestParam("cnes") Integer cnes) {
+        Establishment establishment = this.establishmentServicePort.findByCnes(cnes);
+        return ResponseEntity.status(HttpStatus.OK).body(establishment);
+    }
+
     @GetMapping("/findAllByName")
     public ResponseEntity<Object> findAllByName(
         @RequestParam("name") String name, 

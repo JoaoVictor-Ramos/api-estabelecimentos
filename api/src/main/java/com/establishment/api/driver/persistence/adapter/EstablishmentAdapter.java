@@ -2,6 +2,7 @@ package com.establishment.api.driver.persistence.adapter;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 
 import org.springframework.data.domain.Page;
 import org.springframework.data.domain.PageImpl;
@@ -31,6 +32,16 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
         }
         this.establishmentRepository.saveAll(entities);
         return "Establishment saved";
+    }
+
+    @Override
+    public Establishment findByCnes(Integer cnes) {
+        Optional<EstablishmentEntity> entity = this.establishmentRepository.findByCodCnes(cnes);
+        if (entity.isEmpty()) {
+            return null;
+        }
+        
+        return EstablishmentEntityMapper.getInstance().entityToData(entity.get());
     }
 
     @Override
@@ -64,6 +75,23 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
 
         List<Establishment> entitiesOut = new ArrayList<>();
         for (EstablishmentEntity e : entities) {
+            Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
+            entitiesOut.add(data);
+        }
+        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
+        return pageableOut;
+    }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
+        if (entities.isEmpty()) {
+            return null;
+        }
+
+        List<Establishment> entitiesOut = new ArrayList<>();
+        for (EstablishmentEntity e: entities) {
             Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
             entitiesOut.add(data);
         }

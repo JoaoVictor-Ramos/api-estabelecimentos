@@ -46,6 +46,19 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
+    public Establishment findByCnes(Integer cnes) {
+        if (!this.establishmentLogic.isCnes(cnes)) {
+            throw new InvalidEstablishmentAttribute("Invalid CNES: " + cnes);
+        }
+
+        Establishment establishmentOut = this.establishmentPersistencePort.findByCnes(cnes);
+        if (establishmentOut == null) {
+            throw new EstablishmentNotFoundException("Establishment not found with this CNES: " + cnes);
+        }
+        return establishmentOut;
+    }
+
+    @Override
     public Page<Establishment> findAllByName(String name, int page, int size) {
         Page<Establishment> establishments = this.establishmentPersistencePort.findAllByName(name, page, size);
         if (establishments == null) {
@@ -69,5 +82,17 @@ public class EstablishmentService implements EstablishmentServicePort {
             throw new EstablishmentNotFoundException("Establishment not found");
         }
         return establishments;
+    }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size) {
+        if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
+            throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
+        }
+        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, page, size);
+        if (establishmentOut == null || establishmentOut.isEmpty()) {
+            throw new EstablishmentNotFoundException("Establishments not found");
+        }
+        return establishmentOut;
     }
 }

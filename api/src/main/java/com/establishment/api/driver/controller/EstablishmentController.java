@@ -35,6 +35,12 @@ public class EstablishmentController {
         return ResponseEntity.status(HttpStatus.CREATED).body("Successfully imported establishments");
     }
 
+    @GetMapping("/findByCnes")
+    public ResponseEntity<Object> findByCnes(@RequestParam("cnes") Integer cnes) {
+        Establishment establishment = this.establishmentServicePort.findByCnes(cnes);
+        return ResponseEntity.status(HttpStatus.OK).body(establishment);
+    }
+
     @GetMapping("/findAllByName")
     public ResponseEntity<Object> findAllByName(
         @RequestParam("name") String name, 
@@ -54,6 +60,19 @@ public class EstablishmentController {
         @RequestParam(defaultValue = "100") int size) {
         
         Page<Establishment> establishments = this.establishmentServicePort.findAllByNameAndStateAndTypeAndShift(name, state, type, shift, page, size);
+        return ResponseEntity.status(HttpStatus.OK).body(establishments);
+    }
+
+    @GetMapping("/findByLocalCoordinates")
+    public ResponseEntity<Object> findByLocalCoordinates(
+        @RequestParam("minLatitude") Double minLatitude,
+        @RequestParam("maxLatitude") Double maxLatitude,
+        @RequestParam("minLongitude") Double minLongitude,
+        @RequestParam("maxLongitude") Double maxLongitude,
+        @RequestParam(defaultValue = "0") int page,
+        @RequestParam(defaultValue = "100") int size) {
+            
+        Page<Establishment> establishments = this.establishmentServicePort.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
 }

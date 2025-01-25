@@ -11,4 +11,5 @@ public interface EstablishmentPersistencePort {
     Establishment findByCnes(Integer cnes);
     Page<Establishment> findAllByName(String name, int page, int size);
     Page<Establishment> findAllByNameAndStateAndTypeAndShift(String name, int state, int type, int shift, int page, int size);
+    Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size);
 }

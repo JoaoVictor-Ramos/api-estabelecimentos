@@ -81,4 +81,21 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
         Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
         return pageableOut;
     }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size) {
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
+        if (entities.isEmpty()) {
+            return null;
+        }
+
+        List<Establishment> entitiesOut = new ArrayList<>();
+        for (EstablishmentEntity e: entities) {
+            Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
+            entitiesOut.add(data);
+        }
+        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
+        return pageableOut;
+    }
 }

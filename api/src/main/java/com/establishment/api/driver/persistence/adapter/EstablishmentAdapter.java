@@ -62,6 +62,27 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
     }
 
     @Override
+    public Page<Establishment> findAllByNameAndFilteringAndType(String name, int state, int type, int shift, int page, int size) {
+        String sState = state == -1 ? null : String.valueOf(state);
+        String sType  = type == -1 ? null : String.valueOf(type);
+        String sShift = shift == -1 ? null : String.valueOf(shift);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findAllByNameAndFiltroAndTipoUnidade(name, sState, sType, sShift, pageable);
+        if (entities.isEmpty()) {
+            return null;
+        }
+
+        List<Establishment> entitiesOut = new ArrayList<>();
+        for (EstablishmentEntity e : entities) {
+            Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
+            entitiesOut.add(data);
+        }
+        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
+        return pageableOut;
+    }
+
+    @Override
     public Page<Establishment> findAllByNameAndStateAndTypeAndShift(String name, int state, int type, int shift, int page, int size) {
         String sState = state == -1 ? null : String.valueOf(state);
         String sType  = type == -1 ? null : String.valueOf(type);

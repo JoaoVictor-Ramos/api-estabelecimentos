@@ -68,6 +68,23 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
+    public Page<Establishment> findAllByNameAndFilteringAndType(String name, String state, String type, String shift, int page, int size) {
+        int nState = state.trim() != "" ? Integer.valueOf(state) : -1;
+        int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
+        int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
+
+        if (name.trim() == "") {
+            throw new InvalidEstablishmentAttribute("Name cannot be NULL or EMPTY");
+        }
+
+        Page<Establishment> establishments = this.establishmentPersistencePort.findAllByNameAndFilteringAndType(name, nState, nType, nShift, page, size);
+        if (establishments == null) {
+            throw new EstablishmentNotFoundException("Establishment not found");
+        }
+        return establishments;
+    }
+
+    @Override
     public Page<Establishment> findAllByNameAndStateAndTypeAndShift(String name, String state, String type, String shift, int page, int size) {
         int nState = state.trim() != "" ? Integer.valueOf(state) : -1;
         int nType = type.trim() != "" ? Integer.valueOf(type) : -1;

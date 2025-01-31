@@ -29,11 +29,33 @@ public interface EstablishmentRepository extends CrudRepository<EstablishmentEnt
             """, nativeQuery = true)
     Page<EstablishmentEntity> findByLocalCoordinates(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, Pageable pageable);
     
-    @Query("SELECT u FROM establishment u " +
-        "WHERE (:name IS NULL OR u.nomeFantasia LIKE %:name%) AND " +
-        "(:codUf IS NULL OR u.codUf = :codUf) AND " +
-        "(:tipoUnidade IS NULL OR u.tipoUnidade = :tipoUnidade) AND " +
-        "(:codTurnAtendimento IS NULL OR u.codTurnAtendimento = :codTurnAtendimento) " +
-        "ORDER BY u.nomeFantasia")
+    @Query(value = """
+        SELECT DISTINCT u FROM establishment u
+        WHERE 
+            (:name IS NULL OR u.nomeFantasia LIKE %:name%) 
+        AND
+            (:codUf IS NULL OR u.codUf = :codUf) 
+        AND
+            (:tipoUnidade IS NULL OR u.tipoUnidade = :tipoUnidade) 
+        AND
+            (:codTurnAtendimento IS NULL OR u.codTurnAtendimento = :codTurnAtendimento)
+        ORDER BY u.nomeFantasia
+            """, nativeQuery = false)
     Page<EstablishmentEntity> findAllByNomeFantasiaAndCodUfAndTipoUnidadeAndCodTurnAtendimento(@Param("name") String name, @Param("codUf") String codUf, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
+
+    @Query(value = """
+        SELECT DISTINCT u FROM establishment u
+        WHERE
+            (u.tipoUnidade IN (1,2,70,71))
+        AND
+            (:name IS NULL OR u.nomeFantasia LIKE %:name%) 
+        AND
+            (:codUf IS NULL OR u.codUf = :codUf) 
+        AND
+            (:tipoUnidade IS NULL OR u.tipoUnidade = :tipoUnidade) 
+        AND
+            (:codTurnAtendimento IS NULL OR u.codTurnAtendimento = :codTurnAtendimento)
+        ORDER BY u.nomeFantasia
+            """, nativeQuery = false)
+    Page<EstablishmentEntity> findAllByNameAndFiltroAndTipoUnidade(@Param("name") String name, @Param("codUf") String codUf, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
 }

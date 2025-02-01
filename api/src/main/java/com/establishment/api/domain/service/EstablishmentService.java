@@ -59,15 +59,6 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
-    public Page<Establishment> findAllByName(String name, int page, int size) {
-        Page<Establishment> establishments = this.establishmentPersistencePort.findAllByName(name, page, size);
-        if (establishments == null) {
-            throw new EstablishmentNotFoundException("Establishment not found");
-        }
-        return establishments;
-    }
-
-    @Override
     public Page<Establishment> findAllByNameAndFilteringAndType(String name, String state, String type, String shift, int page, int size) {
         int nState = state.trim() != "" ? Integer.valueOf(state) : -1;
         int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
@@ -101,12 +92,45 @@ public class EstablishmentService implements EstablishmentServicePort {
         return establishments;
     }
 
+    /*
+     * Não utilizado
+    */
     @Override
     public Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size) {
         if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
             throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
         }
         Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, page, size);
+        if (establishmentOut == null || establishmentOut.isEmpty()) {
+            throw new EstablishmentNotFoundException("Establishments not found");
+        }
+        return establishmentOut;
+    }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinatesAndFiltering(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, String type, String shift, int page, int size) {
+        int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
+        int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
+
+        if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
+            throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
+        }
+        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinatesAndFiltering(minLatitude, maxLatitude, minLongitude, maxLongitude, nType, nShift, page, size);
+        if (establishmentOut == null || establishmentOut.isEmpty()) {
+            throw new EstablishmentNotFoundException("Establishments not found");
+        }
+        return establishmentOut;
+    }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinatesAndFilteringAndType(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, String type, String shift, int page, int size) {
+        int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
+        int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
+
+        if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
+            throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
+        }
+        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinatesAndFilteringAndType(minLatitude, maxLatitude, minLongitude, maxLongitude, nType, nShift, page, size);
         if (establishmentOut == null || establishmentOut.isEmpty()) {
             throw new EstablishmentNotFoundException("Establishments not found");
         }

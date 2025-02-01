@@ -45,23 +45,6 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
     }
 
     @Override
-    public Page<Establishment> findAllByName(String name, int page, int size) {
-        Pageable pageable = PageRequest.of(page, size);
-        Page<EstablishmentEntity> entities = this.establishmentRepository.findAllByNomeFantasia(name, pageable);
-        if (entities.isEmpty()) {
-            return null;
-        }
-
-        List<Establishment> entitiesOut = new ArrayList<>();
-        for (EstablishmentEntity e : entities) {
-            Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
-            entitiesOut.add(data);
-        }
-        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
-        return pageableOut;
-    }
-
-    @Override
     public Page<Establishment> findAllByNameAndFilteringAndType(String name, int state, int type, int shift, int page, int size) {
         String sState = state == -1 ? null : String.valueOf(state);
         String sType  = type == -1 ? null : String.valueOf(type);
@@ -107,6 +90,46 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
     public Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size) {
         Pageable pageable = PageRequest.of(page, size);
         Page<EstablishmentEntity> entities = this.establishmentRepository.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, pageable);
+        if (entities.isEmpty()) {
+            return null;
+        }
+
+        List<Establishment> entitiesOut = new ArrayList<>();
+        for (EstablishmentEntity e: entities) {
+            Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
+            entitiesOut.add(data);
+        }
+        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
+        return pageableOut;
+    }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinatesAndFiltering(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int type, int shift, int page, int size) {
+        String sType  = type == -1 ? null : String.valueOf(type);
+        String sShift = shift == -1 ? null : String.valueOf(shift);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLocalCoordinatesAndFiltering(minLatitude, maxLatitude, minLongitude, maxLongitude, sType, sShift, pageable);
+        if (entities.isEmpty()) {
+            return null;
+        }
+
+        List<Establishment> entitiesOut = new ArrayList<>();
+        for (EstablishmentEntity e: entities) {
+            Establishment data = EstablishmentEntityMapper.getInstance().entityToData(e);
+            entitiesOut.add(data);
+        }
+        Page<Establishment> pageableOut = new PageImpl<>(entitiesOut.subList(0, entitiesOut.size()), pageable, entities.getTotalElements());
+        return pageableOut;
+    }
+
+    @Override
+    public Page<Establishment> findByLocalCoordinatesAndFilteringAndType(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int type, int shift, int page, int size) {
+        String sType  = type == -1 ? null : String.valueOf(type);
+        String sShift = shift == -1 ? null : String.valueOf(shift);
+
+        Pageable pageable = PageRequest.of(page, size);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLocalCoordinatesAndFilteringAndTipoUnidade(minLatitude, maxLatitude, minLongitude, maxLongitude, sType, sShift, pageable);
         if (entities.isEmpty()) {
             return null;
         }

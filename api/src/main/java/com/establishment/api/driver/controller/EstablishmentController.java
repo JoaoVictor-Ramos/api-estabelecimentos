@@ -41,6 +41,9 @@ public class EstablishmentController {
         return ResponseEntity.status(HttpStatus.OK).body(establishment);
     }
 
+    /*
+     * For consultation
+    */
     @GetMapping("/findAllByNameAndFilteringAndType")
     public ResponseEntity<Object> findAllByNameAndFilteringAndType(
         @RequestParam("name") String name,
@@ -54,6 +57,9 @@ public class EstablishmentController {
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
 
+    /*
+     * For search establishment
+    */
     @GetMapping("/findAllByNameAndStateAndTypeAndShift")
     public ResponseEntity<Object> findAllByNameAndStateAndTypeAndShift(
         @RequestParam("name") String name,

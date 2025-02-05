@@ -18,7 +18,7 @@ public class GlobalExceptionHandler {
     @ExceptionHandler(IOException.class)
     public ResponseEntity<Object> handleIOException(IOException ex) {
         String errors = ex.getMessage();
-        return new ResponseEntity<>("IOException: " + errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("IOException: " + errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
     
     @ExceptionHandler(EstablishmentNotFoundException.class)
@@ -32,19 +32,19 @@ public class GlobalExceptionHandler {
         String errors = "Invalid argument type: " + ex.getName() +
                          " | Expected: " + ex.getRequiredType().getSimpleName() +
                          " | Provided: " + ex.getValue();
-        return new ResponseEntity<>("MethodArgumentTypeMismatchException: " + errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("MethodArgumentTypeMismatchException: " + errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(MissingServletRequestParameterException.class)
     public ResponseEntity<Object> handleMissingServletRequestParameterException(MissingServletRequestParameterException ex) {
         String errors = ex.getMessage();
-        return new ResponseEntity<>("MissingServletRequestParameterException: " + errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("MissingServletRequestParameterException: " + errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(NumberFormatException.class)
     public ResponseEntity<Object> handleNumberFormatException(NumberFormatException ex) {
         String errors = ex.getMessage();
-        return new ResponseEntity<>("NumberFormatException: " + errors, HttpStatus.BAD_REQUEST);
+        return new ResponseEntity<>("NumberFormatException: " + errors, HttpStatus.INTERNAL_SERVER_ERROR);
     }
 
     @ExceptionHandler(InvalidEstablishmentAttribute.class)

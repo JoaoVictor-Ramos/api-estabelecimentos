@@ -42,26 +42,10 @@ public class EstablishmentController {
     }
 
     /*
-     * For consultation
-    */
-    @GetMapping("/findAllByNameAndFilteringAndType")
-    public ResponseEntity<Object> findAllByNameAndFilteringAndType(
-        @RequestParam("name") String name,
-        @RequestParam("state") String state,
-        @RequestParam("type") String type,
-        @RequestParam("shift") String shift,
-        @RequestParam(defaultValue = "0") int page,
-        @RequestParam(defaultValue = "100") int size) {
-        
-        Page<Establishment> establishments = this.establishmentServicePort.findAllByNameAndFilteringAndType(name, state, type, shift, page, size);
-        return ResponseEntity.status(HttpStatus.OK).body(establishments);
-    }
-
-    /*
      * For search establishment
     */
-    @GetMapping("/findAllByNameAndStateAndTypeAndShift")
-    public ResponseEntity<Object> findAllByNameAndStateAndTypeAndShift(
+    @GetMapping("/findAllByNameAndFilters")
+    public ResponseEntity<Object> findAllByNameAndFilters(
         @RequestParam("name") String name,
         @RequestParam("state") String state,
         @RequestParam("type") String type,
@@ -69,28 +53,31 @@ public class EstablishmentController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "100") int size) {
         
-        Page<Establishment> establishments = this.establishmentServicePort.findAllByNameAndStateAndTypeAndShift(name, state, type, shift, page, size);
+        Page<Establishment> establishments = this.establishmentServicePort.findAllByNameAndFilters(name, state, type, shift, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
 
     /*
-     * Não utilizado
+     * For consultation
     */
-    @GetMapping("/findByLocalCoordinates")
-    public ResponseEntity<Object> findByLocalCoordinates(
-        @RequestParam("minLatitude") Double minLatitude,
-        @RequestParam("maxLatitude") Double maxLatitude,
-        @RequestParam("minLongitude") Double minLongitude,
-        @RequestParam("maxLongitude") Double maxLongitude,
+    @GetMapping("/findAllByNameForConsultation")
+    public ResponseEntity<Object> findAllByNameForConsultation(
+        @RequestParam("name") String name,
+        @RequestParam("state") String state,
+        @RequestParam("type") String type,
+        @RequestParam("shift") String shift,
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "100") int size) {
-            
-        Page<Establishment> establishments = this.establishmentServicePort.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, page, size);
+        
+        Page<Establishment> establishments = this.establishmentServicePort.findAllByNameForConsultation(name, state, type, shift, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
 
-    @GetMapping("/findByLocalCoordinatesAndFiltering")
-    public ResponseEntity<Object> findByLocalCoordinatesAndFiltering(
+    /*
+     * For search establishment by geolocation
+    */
+    @GetMapping("/findByLatLonAndFilters")
+    public ResponseEntity<Object> findByLatLonAndFilters(
         @RequestParam("minLatitude") Double minLatitude,
         @RequestParam("maxLatitude") Double maxLatitude,
         @RequestParam("minLongitude") Double minLongitude,
@@ -100,12 +87,15 @@ public class EstablishmentController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "100") int size) {
             
-        Page<Establishment> establishments = this.establishmentServicePort.findByLocalCoordinatesAndFiltering(minLatitude, maxLatitude, minLongitude, maxLongitude, type, shift, page, size);
+        Page<Establishment> establishments = this.establishmentServicePort.findByLatLonAndFilters(minLatitude, maxLatitude, minLongitude, maxLongitude, type, shift, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
 
-    @GetMapping("/findByLocalCoordinatesAndFilteringAndType")
-    public ResponseEntity<Object> findByLocalCoordinatesAndFilteringAndType(
+    /*
+     * For consultation by geolocation
+    */
+    @GetMapping("/findByLatLonForConsultation")
+    public ResponseEntity<Object> findByLatLonForConsultation(
         @RequestParam("minLatitude") Double minLatitude,
         @RequestParam("maxLatitude") Double maxLatitude,
         @RequestParam("minLongitude") Double minLongitude,
@@ -115,7 +105,7 @@ public class EstablishmentController {
         @RequestParam(defaultValue = "0") int page,
         @RequestParam(defaultValue = "100") int size) {
             
-        Page<Establishment> establishments = this.establishmentServicePort.findByLocalCoordinatesAndFilteringAndType(minLatitude, maxLatitude, minLongitude, maxLongitude, type, shift, page, size);
+        Page<Establishment> establishments = this.establishmentServicePort.findByLatLonForConsultation(minLatitude, maxLatitude, minLongitude, maxLongitude, type, shift, page, size);
         return ResponseEntity.status(HttpStatus.OK).body(establishments);
     }
 }

@@ -13,22 +13,6 @@ import com.establishment.api.driver.persistence.entity.EstablishmentEntity;
 public interface EstablishmentRepository extends CrudRepository<EstablishmentEntity, Integer>{
     Optional<EstablishmentEntity> findByCodCnes(Integer cnes);
 
-    /*
-     * Não utilizado
-    */
-    @Query(value = """
-            SELECT * FROM establishment e
-            WHERE
-                (:minLatitude <= TRY_CONVERT(float, e.num_latitude)
-            AND
-                TRY_CONVERT(float, e.num_latitude) <= :maxLatitude)
-            AND
-                (:minLongitude <= TRY_CONVERT(float, e.num_longitude)
-            AND
-                TRY_CONVERT(float, e.num_longitude) <= :maxLongitude)
-            """, nativeQuery = true)
-    Page<EstablishmentEntity> findByLocalCoordinates(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, Pageable pageable);
-    
     @Query(value = """
         SELECT u FROM establishment u
         WHERE 
@@ -75,7 +59,7 @@ public interface EstablishmentRepository extends CrudRepository<EstablishmentEnt
                 (:codTurnAtendimento IS NULL OR e.cod_turn_atendimento = :codTurnAtendimento)
             ORDER BY e.nome_fantasia
             """, nativeQuery = true)
-    Page<EstablishmentEntity> findByLocalCoordinatesAndFiltering(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
+    Page<EstablishmentEntity> findByLatLonAndFilters(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
     
     @Query(value = """
             SELECT * FROM establishment e
@@ -95,5 +79,5 @@ public interface EstablishmentRepository extends CrudRepository<EstablishmentEnt
                 (:codTurnAtendimento IS NULL OR e.cod_turn_atendimento = :codTurnAtendimento)
             ORDER BY e.nome_fantasia
             """, nativeQuery = true)
-    Page<EstablishmentEntity> findByLocalCoordinatesAndFilteringAndTipoUnidade(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
+    Page<EstablishmentEntity> findByLatLonForConsultation(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
 }

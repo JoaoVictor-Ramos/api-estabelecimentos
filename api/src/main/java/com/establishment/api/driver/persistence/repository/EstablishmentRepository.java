@@ -46,38 +46,38 @@ public interface EstablishmentRepository extends CrudRepository<EstablishmentEnt
     @Query(value = """
             SELECT * FROM establishment e
             WHERE
-                (:minLatitude <= TRY_CONVERT(float, e.num_latitude)
+                (:minLatitude >= e.num_latitude
             AND
-                TRY_CONVERT(float, e.num_latitude) <= :maxLatitude)
+                e.num_latitude >= :maxLatitude)
             AND
-                (:minLongitude <= TRY_CONVERT(float, e.num_longitude)
+                (:minLongitude >= e.num_longitude
             AND
-                TRY_CONVERT(float, e.num_longitude) <= :maxLongitude)
+                e.num_longitude >= :maxLongitude)
             AND
-                (:tipoUnidade IS NULL OR e.tipo_unidade = :tipoUnidade) 
+                (:tipoUnidade IS NULL OR CAST(e.tipo_unidade AS text) = :tipoUnidade) 
             AND
-                (:codTurnAtendimento IS NULL OR e.cod_turn_atendimento = :codTurnAtendimento)
+                (:codTurnAtendimento IS NULL OR CAST(e.cod_turn_atendimento AS text) = :codTurnAtendimento)
             ORDER BY e.nome_fantasia
             """, nativeQuery = true)
-    Page<EstablishmentEntity> findByLatLonAndFilters(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
+    Page<EstablishmentEntity> findByLatLonAndFilters(@Param("minLatitude") String minLatitude, @Param("maxLatitude") String maxLatitude, @Param("minLongitude") String minLongitude, @Param("maxLongitude") String maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
     
     @Query(value = """
             SELECT * FROM establishment e
             WHERE
                 (e.tipo_unidade IN (1,2,70,71,72,73,85))
             AND
-                (:minLatitude <= TRY_CONVERT(float, e.num_latitude)
+                (:minLatitude >= e.num_latitude
             AND
-                TRY_CONVERT(float, e.num_latitude) <= :maxLatitude)
+                e.num_latitude >= :maxLatitude)
             AND
-                (:minLongitude <= TRY_CONVERT(float, e.num_longitude)
+                (:minLongitude >= e.num_longitude
             AND
-                TRY_CONVERT(float, e.num_longitude) <= :maxLongitude)
+                e.num_longitude >= :maxLongitude)
             AND
                 (:tipoUnidade IS NULL OR e.tipo_unidade = :tipoUnidade) 
             AND
                 (:codTurnAtendimento IS NULL OR e.cod_turn_atendimento = :codTurnAtendimento)
             ORDER BY e.nome_fantasia
             """, nativeQuery = true)
-    Page<EstablishmentEntity> findByLatLonForConsultation(@Param("minLatitude") Double minLatitude, @Param("maxLatitude") Double maxLatitude, @Param("minLongitude") Double minLongitude, @Param("maxLongitude") Double maxLongitude, @Param("tipoUnidade") String tipoUnidade, @Param("codTurnAtendimento") String codTurnAtendimento, Pageable pageable);
+    Page<EstablishmentEntity> findByLatLonForConsultation(@Param("minLatitude") String minLatitude, @Param("maxLatitude") String maxLatitude, @Param("minLongitude") String minLongitude, @Param("maxLongitude") String maxLongitude, @Param("tipoUnidade") Integer tipoUnidade, @Param("codTurnAtendimento") Integer codTurnAtendimento, Pageable pageable);
 }

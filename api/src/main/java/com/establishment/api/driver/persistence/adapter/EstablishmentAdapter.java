@@ -92,7 +92,7 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
         String sShift = shift == -1 ? null : String.valueOf(shift);
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLatLonAndFilters(minLatitude, maxLatitude, minLongitude, maxLongitude, sType, sShift, pageable);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLatLonAndFilters(minLatitude.toString(), maxLatitude.toString(), minLongitude.toString(), maxLongitude.toString(), sType, sShift, pageable);
         if (entities.isEmpty()) {
             return null;
         }
@@ -108,11 +108,11 @@ public class EstablishmentAdapter implements EstablishmentPersistencePort{
 
     @Override
     public Page<Establishment> findByLatLonForConsultation(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int type, int shift, int page, int size) {
-        String sType  = type == -1 ? null : String.valueOf(type);
-        String sShift = shift == -1 ? null : String.valueOf(shift);
+        Integer sType  = type == -1 ? null : type;
+        Integer sShift = shift == -1 ? null : shift;
 
         Pageable pageable = PageRequest.of(page, size);
-        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLatLonForConsultation(minLatitude, maxLatitude, minLongitude, maxLongitude, sType, sShift, pageable);
+        Page<EstablishmentEntity> entities = this.establishmentRepository.findByLatLonForConsultation(minLatitude.toString(), maxLatitude.toString(), minLongitude.toString(), maxLongitude.toString(), sType, sShift, pageable);
         if (entities.isEmpty()) {
             return null;
         }

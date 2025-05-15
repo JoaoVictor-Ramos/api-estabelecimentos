@@ -59,7 +59,7 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
-    public Page<Establishment> findAllByNameAndFilteringAndType(String name, String state, String type, String shift, int page, int size) {
+    public Page<Establishment> findAllByNameAndFilters(String name, String state, String type, String shift, int page, int size) {
         int nState = state.trim() != "" ? Integer.valueOf(state) : -1;
         int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
         int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
@@ -68,7 +68,7 @@ public class EstablishmentService implements EstablishmentServicePort {
             throw new InvalidEstablishmentAttribute("Name cannot be NULL or EMPTY");
         }
 
-        Page<Establishment> establishments = this.establishmentPersistencePort.findAllByNameAndFilteringAndType(name, nState, nType, nShift, page, size);
+        Page<Establishment> establishments = this.establishmentPersistencePort.findAllByNameAndFilters(name, nState, nType, nShift, page, size);
         if (establishments == null) {
             throw new EstablishmentNotFoundException("Establishment not found");
         }
@@ -76,7 +76,7 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
-    public Page<Establishment> findAllByNameAndStateAndTypeAndShift(String name, String state, String type, String shift, int page, int size) {
+    public Page<Establishment> findAllByNameForConsultation(String name, String state, String type, String shift, int page, int size) {
         int nState = state.trim() != "" ? Integer.valueOf(state) : -1;
         int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
         int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
@@ -85,22 +85,22 @@ public class EstablishmentService implements EstablishmentServicePort {
             throw new InvalidEstablishmentAttribute("Name cannot be NULL or EMPTY");
         }
 
-        Page<Establishment> establishments = this.establishmentPersistencePort.findAllByNameAndStateAndTypeAndShift(name, nState, nType, nShift, page, size);
+        Page<Establishment> establishments = this.establishmentPersistencePort.findAllByNameForConsultation(name, nState, nType, nShift, page, size);
         if (establishments == null) {
             throw new EstablishmentNotFoundException("Establishment not found");
         }
         return establishments;
     }
 
-    /*
-     * Não utilizado
-    */
     @Override
-    public Page<Establishment> findByLocalCoordinates(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, int page, int size) {
+    public Page<Establishment> findByLatLonAndFilters(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, String type, String shift, int page, int size) {
+        int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
+        int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
+
         if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
             throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
         }
-        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinates(minLatitude, maxLatitude, minLongitude, maxLongitude, page, size);
+        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLatLonAndFilters(minLatitude, maxLatitude, minLongitude, maxLongitude, nType, nShift, page, size);
         if (establishmentOut == null || establishmentOut.isEmpty()) {
             throw new EstablishmentNotFoundException("Establishments not found");
         }
@@ -108,29 +108,14 @@ public class EstablishmentService implements EstablishmentServicePort {
     }
 
     @Override
-    public Page<Establishment> findByLocalCoordinatesAndFiltering(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, String type, String shift, int page, int size) {
+    public Page<Establishment> findByLatLonForConsultation(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, String type, String shift, int page, int size) {
         int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
         int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
 
         if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
             throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
         }
-        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinatesAndFiltering(minLatitude, maxLatitude, minLongitude, maxLongitude, nType, nShift, page, size);
-        if (establishmentOut == null || establishmentOut.isEmpty()) {
-            throw new EstablishmentNotFoundException("Establishments not found");
-        }
-        return establishmentOut;
-    }
-
-    @Override
-    public Page<Establishment> findByLocalCoordinatesAndFilteringAndType(Double minLatitude, Double maxLatitude, Double minLongitude, Double maxLongitude, String type, String shift, int page, int size) {
-        int nType = type.trim() != "" ? Integer.valueOf(type) : -1;
-        int nShift = shift.trim() != "" ? Integer.valueOf(shift) : -1;
-
-        if (minLatitude == null || maxLatitude == null || minLongitude == null || maxLongitude == null) {
-            throw new InvalidEstablishmentAttribute("Maximum and minimum latitude and longitude cannot be NULL");
-        }
-        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLocalCoordinatesAndFilteringAndType(minLatitude, maxLatitude, minLongitude, maxLongitude, nType, nShift, page, size);
+        Page<Establishment> establishmentOut = this.establishmentPersistencePort.findByLatLonForConsultation(minLatitude, maxLatitude, minLongitude, maxLongitude, nType, nShift, page, size);
         if (establishmentOut == null || establishmentOut.isEmpty()) {
             throw new EstablishmentNotFoundException("Establishments not found");
         }
